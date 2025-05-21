@@ -10,7 +10,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@lynx-js/react": "^0.108.1"
+    "@lynx-js/react": "^0.108.1",
+    "zod": "^3.25.17"
   },
   "devDependencies": {
     "@lynx-js/qrcode-rsbuild-plugin": "^0.3.6",
