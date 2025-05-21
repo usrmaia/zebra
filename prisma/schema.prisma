@@ -1,0 +1,148 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id             String          @id @default(ulid())
+  name           String
+  description    String
+  priceCents     BigInt
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+  imageUrl       String?
+  Category       Category?       @relation(fields: [categoryId], references: [id])
+  categoryId     String?
+  OrderItems     OrderItem[]
+  Stocks         Stock[]
+  StockMovements StockMovement[]
+
+  @@map("Products")
+}
+
+model Category {
+  id          String    @id @default(ulid())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  Products    Product[]
+
+  @@map("Categories")
+}
+
+model Order {
+  id         String      @id @default(ulid())
+  totalPrice BigInt
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  deletedAt  DateTime?
+  User       User?       @relation(fields: [userId], references: [id])
+  userId     String?
+  OrderItems OrderItem[]
+
+  @@map("Orders")
+}
+
+model OrderItem {
+  id                String    @id @default(ulid())
+  Order             Order     @relation(fields: [orderId], references: [id])
+  orderId           String
+  Product           Product   @relation(fields: [productId], references: [id])
+  productId         String
+  productPriceCents BigInt
+  quantity          Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  @@map("OrderItems")
+}
+
+model Stock {
+  id        String   @id @default(ulid())
+  Product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Stocks")
+}
+
+model StockMovement {
+  id        String       @id @default(ulid())
+  Product   Product      @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  type      MovementType
+  note      String?
+  createdAt DateTime     @default(now())
+
+  @@map("StockMovements")
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model Payment {
+  id          String        @id @default(ulid())
+  orderId     String
+  method      PaymentMethod
+  amountCents BigInt
+  status      PaymentStatus @default(PENDING)
+  paidAt      DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@map("Payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  PAYPAL
+  BANK_TRANSFER
+  CASH_ON_DELIVERY
+  PIX
+}
+
+model User {
+  id        String    @id @default(ulid())
+  name      String
+  email     String    @unique
+  role      Role      @default(CUSTOMER)
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  Orders    Order[]
+
+  @@map("Users")
+}
+
+enum Role {
+  ADMIN
+  CUSTOMER
+}
