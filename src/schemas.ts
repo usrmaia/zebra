@@ -14,14 +14,14 @@ export type Category = z.infer<typeof CategorySchema>;
 export const ProductSchema = z.object({
   id: z.string(),
   name: z.string().min(1).max(256),
-  description: z.string().max(1024),
+  description: z.string().max(1024).nullable(),
   priceCents: z.bigint().nonnegative(),
   createdAt: z.date(),
   updatedAt: z.date(),
   deletedAt: z.date().nullable(),
   imageUrl: z.string().nullable(),
   categoryId: z.string().nullable(),
-  Category: CategorySchema,
+  Category: CategorySchema.optional(),
 });
 
 export type Product = z.infer<typeof ProductSchema>;
@@ -96,7 +96,7 @@ export type Payment = z.infer<typeof PaymentSchema>;
 export const UserSchema = z.object({
   id: z.string(),
   name: z.string(),
-  email: z.string().email(),
+  email: z.email(),
   role: z.enum(['ADMIN', 'CUSTOMER']),
   password: z.string(),
   createdAt: z.date(),
@@ -127,8 +127,8 @@ export const FilterSchema = z.object({
       ]),
     )
     .optional(),
-  take: z.number().optional(),
-  skip: z.number().optional(),
+  take: z.number().min(1).optional(),
+  skip: z.number().min(1).optional(),
 });
 
 export type Filter = z.infer<typeof FilterSchema>;

@@ -2,14 +2,14 @@
 CREATE TABLE "Products" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
+    "description" TEXT,
     "priceCents" BIGINT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "deletedAt" DATETIME,
     "imageUrl" TEXT,
-    "categoryId" TEXT NOT NULL,
-    CONSTRAINT "Products_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Categories" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    "categoryId" TEXT,
+    CONSTRAINT "Products_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Categories" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -25,7 +25,7 @@ CREATE TABLE "Categories" (
 -- CreateTable
 CREATE TABLE "Orders" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "totalPrice" INTEGER NOT NULL,
+    "totalPrice" BIGINT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     "deletedAt" DATETIME,
