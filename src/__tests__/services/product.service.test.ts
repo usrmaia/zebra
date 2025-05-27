@@ -12,6 +12,7 @@ const mockProduct: Product = {
   description: 'A test product',
   priceCents: 1000n,
   imageUrl: 'http://example.com/image.jpg',
+  quantity: 10,
   createdAt: new Date(),
   updatedAt: new Date(),
   deletedAt: null,

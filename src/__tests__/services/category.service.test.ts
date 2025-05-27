@@ -16,32 +16,34 @@ const mockCategory: Category = {
 };
 
 describe('CategoryService', () => {
-  const service = new CategoryService();
+  const categoryService = new CategoryService();
 
   describe('getCategories', () => {
     it('deve retornar categorias quando filtro é válido', async () => {
       prisma.category.findMany.mockResolvedValue([mockCategory]);
-      const result = await service.getCategories({ take: 1 });
+      const result = await categoryService.getCategories({ take: 1 });
       expect(result).toEqual([mockCategory]);
     });
 
     it('deve lançar erro se filtro for inválido', async () => {
-      await expect(service.getCategories({ take: -1 })).rejects.toThrow();
+      await expect(
+        categoryService.getCategories({ take: -1 }),
+      ).rejects.toThrow();
     });
   });
 
   describe('getCategoryById', () => {
     it('deve retornar categoria se encontrada', async () => {
       prisma.category.findUnique.mockResolvedValue(mockCategory);
-      const result = await service.getCategoryById(mockCategory.id);
+      const result = await categoryService.getCategoryById(mockCategory.id);
       expect(result).toEqual(mockCategory);
     });
 
     it('deve lançar erro se categoria não encontrada', async () => {
       prisma.category.findUnique.mockResolvedValue(null);
-      await expect(service.getCategoryById('not-found')).rejects.toThrow(
-        'Categoria não encontrada!',
-      );
+      await expect(
+        categoryService.getCategoryById('not-found'),
+      ).rejects.toThrow('Categoria não encontrada!');
     });
   });
 
@@ -49,13 +51,13 @@ describe('CategoryService', () => {
     it('deve criar e retornar categoria quando dados são válidos', async () => {
       prisma.category.create.mockResolvedValue(mockCategory);
       const { id, createdAt, updatedAt, deletedAt, ...data } = mockCategory;
-      const result = await service.createCategory({ ...data });
+      const result = await categoryService.createCategory({ ...data });
       expect(result).toEqual(mockCategory);
     });
 
     it('deve lançar erro se dados forem inválidos', async () => {
       // @ts-expect-error: invalid data
-      await expect(service.createCategory({})).rejects.toThrow();
+      await expect(categoryService.createCategory({})).rejects.toThrow();
     });
   });
 
@@ -67,7 +69,7 @@ describe('CategoryService', () => {
         description: 'Updated desc',
       };
       prisma.category.update.mockResolvedValue(_mockCategory);
-      const result = await service.updateCategory(
+      const result = await categoryService.updateCategory(
         _mockCategory.id,
         _mockCategory,
       );
@@ -76,7 +78,7 @@ describe('CategoryService', () => {
 
     it('deve lançar erro se dados forem inválidos', async () => {
       await expect(
-        service.updateCategory(mockCategory.id, { name: '' }),
+        categoryService.updateCategory(mockCategory.id, { name: '' }),
       ).rejects.toThrow();
     });
   });
@@ -85,7 +87,7 @@ describe('CategoryService', () => {
     it('deve deletar e retornar categoria', async () => {
       const deletedAt = new Date();
       prisma.category.update.mockResolvedValue({ ...mockCategory, deletedAt });
-      const result = await service.deleteCategory(mockCategory.id);
+      const result = await categoryService.deleteCategory(mockCategory.id);
       expect(result).toEqual({ ...mockCategory, deletedAt });
     });
   });

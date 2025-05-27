@@ -7,5 +7,5 @@
     "editor.formatOnSave": true,
     "editor.formatOnType": true
   },
-  "conventionalCommits.scopes": ["commit", "lynx", "prisma", "schema"]
+  "conventionalCommits.scopes": ["commit", "lynx", "prisma", "schema", "order"]
 }

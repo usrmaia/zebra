@@ -10,7 +10,10 @@ export class CategoryService {
   ): Promise<Category[]> => {
     const { success, data, error } = await FilterSchema.safeParseAsync(filter);
     if (!success) throw new Error(error.message);
-    return prisma.category.findMany({ ...data, where });
+    return prisma.category.findMany({
+      ...data,
+      where: { deletedAt: null, ...where },
+    });
   };
 
   getCategoryById = async (id: string): Promise<Category> => {

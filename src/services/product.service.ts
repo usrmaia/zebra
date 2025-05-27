@@ -11,7 +11,11 @@ export class ProductService {
   ): Promise<Product[]> => {
     const { success, data, error } = await FilterSchema.safeParseAsync(filter);
     if (!success) throw new Error(error.message);
-    return prisma.product.findMany({ ...data, where, include });
+    return prisma.product.findMany({
+      ...data,
+      where: { deletedAt: null, ...where },
+      include,
+    });
   };
 
   getProductById = async (id: string): Promise<Product> => {
@@ -47,6 +51,25 @@ export class ProductService {
     }).safeParseAsync(_data);
     if (!success) throw new Error(error.message);
     return prisma.product.update({ where: { id }, data });
+  };
+
+  addStock = async (id: string, quantityAdd: number): Promise<Product> => {
+    if (quantityAdd == 0) throw new Error('Quantidade inválida!');
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        quantity: {
+          increment: quantityAdd,
+        },
+      },
+    });
+    return updatedProduct;
+  };
+
+  checkStock = async (productId: string, quantity: number) => {
+    const product = await this.getProductById(productId);
+    if ((product.quantity ?? 0) < quantity)
+      throw new Error('Estoque insuficiente!');
   };
 
   deleteProduct = (id: string): Promise<Product> =>

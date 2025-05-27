@@ -15,19 +15,18 @@ datasource db {
 }
 
 model Product {
-  id             String          @id @default(ulid())
-  name           String
-  description    String?
-  priceCents     BigInt
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-  deletedAt      DateTime?
-  imageUrl       String?
-  Category       Category?       @relation(fields: [categoryId], references: [id])
-  categoryId     String?
-  OrderItems     OrderItem[]
-  Stocks         Stock[]
-  StockMovements StockMovement[]
+  id          String      @id @default(ulid())
+  name        String
+  description String?
+  priceCents  BigInt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+  imageUrl    String?
+  quantity    Int?        @default(0)
+  Category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  OrderItems  OrderItem[]
 
   @@map("Products")
 }
@@ -45,71 +44,19 @@ model Category {
 }
 
 model Order {
-  id         String      @id @default(ulid())
-  totalPrice BigInt
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  deletedAt  DateTime?
-  User       User?       @relation(fields: [userId], references: [id])
-  userId     String?
-  OrderItems OrderItem[]
+  id            String         @id @default(ulid())
+  totalPrice    BigInt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
+  userId        String
+  User          User?          @relation(fields: [userId], references: [id])
+  OrderItems    OrderItem[]
+  paymentMethod PaymentMethod?
+  paymentStatus PaymentStatus  @default(PENDING)
+  paymentAt     DateTime?
 
   @@map("Orders")
-}
-
-model OrderItem {
-  id                String    @id @default(ulid())
-  Order             Order     @relation(fields: [orderId], references: [id])
-  orderId           String
-  Product           Product   @relation(fields: [productId], references: [id])
-  productId         String
-  productPriceCents BigInt
-  quantity          Int
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  deletedAt         DateTime?
-
-  @@map("OrderItems")
-}
-
-model Stock {
-  id        String   @id @default(ulid())
-  Product   Product  @relation(fields: [productId], references: [id])
-  productId String
-  quantity  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("Stocks")
-}
-
-model StockMovement {
-  id        String       @id @default(ulid())
-  Product   Product      @relation(fields: [productId], references: [id])
-  productId String
-  quantity  Int
-  type      MovementType
-  note      String?
-  createdAt DateTime     @default(now())
-
-  @@map("StockMovements")
-}
-
-enum MovementType {
-  IN
-  OUT
-}
-
-model Payment {
-  id          String        @id @default(ulid())
-  orderId     String
-  method      PaymentMethod
-  amountCents BigInt
-  status      PaymentStatus @default(PENDING)
-  paidAt      DateTime?
-  createdAt   DateTime      @default(now())
-
-  @@map("Payments")
 }
 
 enum PaymentStatus {
@@ -126,6 +73,21 @@ enum PaymentMethod {
   BANK_TRANSFER
   CASH_ON_DELIVERY
   PIX
+}
+
+model OrderItem {
+  id                String    @id @default(ulid())
+  Order             Order     @relation(fields: [orderId], references: [id])
+  orderId           String
+  Product           Product   @relation(fields: [productId], references: [id])
+  productId         String
+  productPriceCents BigInt
+  quantity          Int
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  @@map("OrderItems")
 }
 
 model User {
