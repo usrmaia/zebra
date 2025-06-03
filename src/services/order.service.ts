@@ -1,14 +1,14 @@
-import { Prisma } from '@/generated/prisma/index.js';
-import prisma from '@/infra/prisma.js';
+import { Prisma } from "@/generated/prisma";
+import prisma from "@/infra/prisma";
 import type {
   Order,
   OrderItem,
   PaymentMethod,
   PaymentStatus,
   Filter,
-} from '@/schemas.js';
-import { OrderSchema, OrderItemSchema, FilterSchema } from '@/schemas.js';
-import { ProductService } from './product.service.js';
+} from "@/schemas";
+import { OrderSchema, OrderItemSchema, FilterSchema } from "@/schemas";
+import { ProductService } from "./product.service";
 
 export class OrderService {
   productService = new ProductService();
@@ -37,7 +37,7 @@ export class OrderService {
       where: { id: id },
       include: { ...include },
     });
-    if (!order) throw new Error('Pedido não encontrado!');
+    if (!order) throw new Error("Pedido não encontrado!");
     return order;
   };
 
@@ -49,7 +49,7 @@ export class OrderService {
       where: { orderId },
       include: { ...include },
     });
-    if (!orderItems) throw new Error('Itens do pedido não encontrados!');
+    if (!orderItems) throw new Error("Itens do pedido não encontrados!");
     return orderItems;
   };
 
@@ -65,7 +65,7 @@ export class OrderService {
     if (!success) throw new Error(error.message);
 
     if (data.paymentMethod) {
-      data.paymentStatus = 'COMPLETED';
+      data.paymentStatus = "COMPLETED";
       data.paymentAt = new Date();
     }
 
@@ -107,7 +107,7 @@ export class OrderService {
     const orderItem = await prisma.orderItem.findUnique({
       where: { id: orderItemId, orderId: orderId },
     });
-    if (!orderItem) throw new Error('Item do pedido não encontrado!');
+    if (!orderItem) throw new Error("Item do pedido não encontrado!");
     const deletedOrderItem = await prisma.orderItem.delete({
       where: { id: orderItem.id, orderId: orderItem.orderId },
     });
@@ -136,8 +136,8 @@ export class OrderService {
     paymentMethod: PaymentMethod,
     paymentStatus: PaymentStatus,
   ): Promise<Order> => {
-    if (!paymentMethod || paymentStatus == 'PENDING')
-      throw new Error('Método de pagamento inválido!');
+    if (!paymentMethod || paymentStatus == "PENDING")
+      throw new Error("Método de pagamento inválido!");
 
     return prisma.order.update({
       where: { id: orderId },

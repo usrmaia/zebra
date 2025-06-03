@@ -1,7 +1,7 @@
-import { Prisma } from '@/generated/prisma/index.js';
-import prisma from '@/infra/prisma.js';
-import type { Category, Filter } from '@/schemas.js';
-import { CategorySchema, FilterSchema } from '@/schemas.js';
+import { Prisma } from "@/generated/prisma";
+import prisma from "@/infra/prisma";
+import type { Category, Filter } from "@/schemas";
+import { CategorySchema, FilterSchema } from "@/schemas";
 
 export class CategoryService {
   getCategories = async (
@@ -18,7 +18,7 @@ export class CategoryService {
 
   getCategoryById = async (id: string): Promise<Category> => {
     const category = await prisma.category.findUnique({ where: { id: id } });
-    if (!category) throw new Error('Categoria não encontrada!');
+    if (!category) throw new Error("Categoria não encontrada!");
     return category;
   };
 

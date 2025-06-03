@@ -1,4 +1,4 @@
-export { CategoryService } from './category.service.js';
-export { OrderService } from './order.service.js';
-export { ProductService } from './product.service.js';
-export { UserService } from './user.service.js';
+export { CategoryService } from "./category.service";
+export { OrderService } from "./order.service";
+export { ProductService } from "./product.service";
+export { UserService } from "./user.service";

@@ -1,7 +1,7 @@
-import { Prisma } from '@/generated/prisma/index.js';
-import prisma from '@/infra/prisma.js';
-import type { Product, Filter } from '@/schemas.js';
-import { ProductSchema, FilterSchema } from '@/schemas.js';
+import { Prisma } from "@/generated/prisma";
+import prisma from "@/infra/prisma";
+import type { Product, Filter } from "@/schemas";
+import { ProductSchema, FilterSchema } from "@/schemas";
 
 export class ProductService {
   getProducts = async (
@@ -20,7 +20,7 @@ export class ProductService {
 
   getProductById = async (id: string): Promise<Product> => {
     const product = await prisma.product.findUnique({ where: { id: id } });
-    if (!product) throw new Error('Produto não encontrado!');
+    if (!product) throw new Error("Produto não encontrado!");
     return product;
   };
 
@@ -54,7 +54,7 @@ export class ProductService {
   };
 
   addStock = async (id: string, quantityAdd: number): Promise<Product> => {
-    if (quantityAdd == 0) throw new Error('Quantidade inválida!');
+    if (quantityAdd == 0) throw new Error("Quantidade inválida!");
     const updatedProduct = await prisma.product.update({
       where: { id },
       data: {
@@ -69,7 +69,7 @@ export class ProductService {
   checkStock = async (productId: string, quantity: number) => {
     const product = await this.getProductById(productId);
     if ((product.quantity ?? 0) < quantity)
-      throw new Error('Estoque insuficiente!');
+      throw new Error("Estoque insuficiente!");
   };
 
   deleteProduct = (id: string): Promise<Product> =>

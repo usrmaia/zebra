@@ -1,11 +1,23 @@
 {
-  "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma",
     "editor.formatOnSave": true,
     "editor.formatOnType": true
   },
-  "conventionalCommits.scopes": ["commit", "lynx", "prisma", "schema", "order"]
+  "conventionalCommits.scopes": [
+    "commit",
+    "schame",
+    "order",
+    "proj",
+    "git",
+    "prettier",
+    "logs",
+    "prisma",
+    "zod",
+    "api",
+    "tests"
+  ]
 }

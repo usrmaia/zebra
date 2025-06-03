@@ -1,7 +1,6 @@
-import { Prisma } from '@/generated/prisma/index.js';
-import prisma from '@/infra/prisma.js';
-import type { User, Filter } from '@/schemas.js';
-import { UserSchema, FilterSchema } from '@/schemas.js';
+import { Prisma } from "@/generated/prisma";
+import prisma from "@/infra/prisma";
+import type { User } from "@/schemas";
 
 export class UserService {
   getUserById = async (
@@ -12,7 +11,7 @@ export class UserService {
       where: { id },
       include: { ...include },
     });
-    if (!user) throw new Error('Usuário não encontrado!');
+    if (!user) throw new Error("Usuário não encontrado!");
     return user;
   };
 }

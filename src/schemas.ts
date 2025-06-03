@@ -1,4 +1,4 @@
-import { z } from 'zod/v4';
+import { z } from "zod/v4";
 
 export const CategorySchema = z.object({
   id: z.string(),
@@ -31,7 +31,7 @@ export const UserSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.email(),
-  role: z.enum(['ADMIN', 'CUSTOMER']),
+  role: z.enum(["ADMIN", "CUSTOMER"]),
   password: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
@@ -55,21 +55,21 @@ export const OrderItemSchema = z.object({
 export type OrderItem = z.infer<typeof OrderItemSchema>;
 
 export const paymentStatusSchema = z.enum([
-  'PENDING',
-  'COMPLETED',
-  'FAILED',
-  'REFUNDED',
+  "PENDING",
+  "COMPLETED",
+  "FAILED",
+  "REFUNDED",
 ]);
 
 export type PaymentStatus = z.infer<typeof paymentStatusSchema>;
 
 export const paymentMethodSchema = z.enum([
-  'CREDIT_CARD',
-  'DEBIT_CARD',
-  'PAYPAL',
-  'BANK_TRANSFER',
-  'CASH_ON_DELIVERY',
-  'PIX',
+  "CREDIT_CARD",
+  "DEBIT_CARD",
+  "PAYPAL",
+  "BANK_TRANSFER",
+  "CASH_ON_DELIVERY",
+  "PIX",
 ]);
 
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
@@ -84,7 +84,7 @@ export const OrderSchema = z.object({
   User: UserSchema.nullable().optional(),
   OrderItems: z.array(OrderItemSchema).optional(),
   paymentMethod: paymentMethodSchema.nullable(),
-  paymentStatus: paymentStatusSchema.default('PENDING'),
+  paymentStatus: paymentStatusSchema.default("PENDING"),
   paymentAt: z.date().nullable(),
 });
 
@@ -102,11 +102,11 @@ export const StockSchema = z.object({
 export type Stock = z.infer<typeof StockSchema>;
 
 export const stockMovementTypeSchema = z.enum([
-  'IN',
-  'OUT',
-  'OPEN',
-  'CANCEL',
-  'ADJUSTMENT',
+  "IN",
+  "OUT",
+  "OPEN",
+  "CANCEL",
+  "ADJUSTMENT",
 ]);
 
 export type StockMovementType = z.infer<typeof stockMovementTypeSchema>;
@@ -134,11 +134,11 @@ export const FilterSchema = z.object({
     .record(
       z.string(),
       z.union([
-        z.literal('asc'),
-        z.literal('desc'),
+        z.literal("asc"),
+        z.literal("desc"),
         z.object({
-          sort: z.union([z.literal('asc'), z.literal('desc')]),
-          nulls: z.union([z.literal('first'), z.literal('last')]).optional(),
+          sort: z.union([z.literal("asc"), z.literal("desc")]),
+          nulls: z.union([z.literal("first"), z.literal("last")]).optional(),
         }),
       ]),
     )
